@@ -5,12 +5,16 @@
         </div>
     
         <div>
-            <h1>Faça seu Login</h1>
+            <h1>Faça já o seu login!</h1>
 
-            <input id="txtLogin" type="text" placeholder="Login">
-            <input id="txtSenha" type="password" placeholder="Senha">
+            <input [(ngModel)]="email" id="txtEmail" type="text" placeholder="E-mail">
+            <p *ngIf="errorEmail">Digite o seu e-mail, por favor!</p>
+            
+            <input [(ngModel)]="senha" id="txtSenha" type="password" placeholder="Senha">
+            <p *ngIf="errorSenha">Digite a sua senha, por favor!</p>
+            <p *ngIf="errorEntrar">E-mail e/ou Senha inválida, revise as informações e tente novamente!</p>
 
-            <button>Entrar</button>
+            <button (click)="entrar()">Entrar</button>
         </div>
     </div>
 </div>
