@@ -10,3 +10,19 @@ body{
     box-sizing: border-box;
     font-family: Helvetica, sans-serif;
 }
+
+button{
+    background-color: $secundary-color;
+    
+    border: none;
+
+    color: $white;
+
+    transition: all 0.5s;
+
+    &:hover{
+        background-color: $black;
+
+        cursor: pointer;
+    }
+}
