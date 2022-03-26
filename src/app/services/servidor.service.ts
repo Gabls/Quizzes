@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +8,21 @@ export class ServidorService {
 
   constructor(private http: HttpClient) { }
 
-  post(url: string, data: any){
-    let jason = JSON.stringify(data);
-    let body = data;
+  get(url: string, token: string){
+    if(token != ""){
+      let header = new HttpHeaders().append("x-api-key", token);
+      return this.http.get(url, {headers : header});
+    }
 
-    return this.http.post(url, body);
+    return this.http.get(url);
+  }
+
+  post(url: string, data: object, token: string){
+    if(token != ""){
+      let header = new HttpHeaders().append("x-api-key", token);
+      return this.http.post(url, data, {headers : header});
+    }
+
+    return this.http.post(url, data);
   }
 }
