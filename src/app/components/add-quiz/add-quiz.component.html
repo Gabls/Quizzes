@@ -1,0 +1,75 @@
+<div id="background" (click)="fechar()">
+</div>
+
+<div id="form">
+    <h1>Novo Quiz!</h1>
+
+    <div id="page01">
+        <span>Título</span>
+        <input [(ngModel)]="titulo" id="txtTitulo" type="text">
+        <p *ngIf="errorTitulo">Digite o Título, por favor!</p>
+    
+        <span>Descrição</span>
+        <textarea [(ngModel)]="descricao" id="txtDescricao"></textarea>
+        <p *ngIf="errorDescricao">Digite a Descrição, por favor!</p>
+    
+        <span>Tipo</span>
+        <select [(ngModel)]="tipo" id="txtTipo">
+            <option value="MULTIPLE_CHOICE_ONE">Multiplas Escolhas</option>
+        </select>
+        <p *ngIf="errorTipo">Selecione um Tipo, por faor!</p>
+    
+        <div>
+            <div>
+                <span>Dificuldade</span>
+                <select [(ngModel)]="dificuldade" id="txtDificuldade">
+                    <option value="EASY">Fácil</option>
+                    <option value="MEDIUM">Médio</option>
+                    <option value="HARD">Difícil</option>
+                </select>
+                <p *ngIf="errorDificuldade">Selecione uma Dificuldade, por faor!</p>
+            </div>
+    
+            <div>
+                <span>Experiência</span>
+                <input [(ngModel)]="xp" id="txtXp" type="number" min="0">
+                <p *ngIf="errorXp">Selecione uma quantidade maior que 0, por faor!</p>
+            </div>
+        </div>
+    
+        <button (click)="avancar()">Avançar</button>
+    </div>
+
+    <div id="page02">
+        <div>
+            <div>
+                <span>Texto</span>
+                <input [(ngModel)]="texto" id="txtTexto" type="text">
+                <p *ngIf="errorTexto">Digite um texto, por favor!</p>
+            </div>
+
+            <div>
+                <span>Correção</span>
+                <select [(ngModel)]="correcao" id="txtCorrecao">
+                    <option value="true">Verdadeiro</option>
+                    <option value="false">Falso</option>
+                </select>
+                <p *ngIf="errorCorreao">Selecione uma das opções, por favor!</p>
+            </div>
+
+            <button (click)="adicionarQuestao()">Adicionar</button>
+        </div>
+
+        <h3>Opções Adicionadas</h3>
+        <div id="listaQuestao">
+            <div *ngFor="let l of questoes; ; let id = index" class="questao">
+                <p>{{l.text}}</p>
+                <button (click)="removerQuestao(id)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"/></svg></button>
+            </div>
+        </div>
+        <p *ngIf="errorOpcao">Adicione pelo menos uma opção, por favor!</p>
+
+        <button (click)="pageToggle()">Voltar</button>
+        <button (click)="enviar()">Enviar</button>
+    </div>
+</div>

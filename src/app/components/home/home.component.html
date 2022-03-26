@@ -1,8 +1,10 @@
 <div id="header">
     <img src="../../../assets/logo.png" alt="Logo da empresa Tindin">
     <h1>Boas vindas, {{nome}}</h1>
-    <button>Adicionar Quiz</button>
+    <button (click)="adicionar()">Adicionar Quiz</button>
 </div>
+
+<app-add-quiz></app-add-quiz>
 
 <div id="content">
     <div *ngFor="let l of lista" id="{{l._id}}" class="quiz">
@@ -16,7 +18,7 @@
         <div class="text">
             <h3>{{l.title}}</h3>
             <p><strong>Descrição:</strong> {{l.description}}</p>
-            <p><strong>Level:</strong> {{l.level || "EMPTY"}}</p>
+            <p><strong>Dificuldade:</strong> {{l.level || "EMPTY"}}</p>
             <p><strong>Tipo:</strong> {{l.type}}</p>
         </div>
     </div>
