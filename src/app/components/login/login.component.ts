@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.servidor.post("https://h-api-ava.tindin.com.br/auth", {email:this.email, password:this.senha}).subscribe(res=>{
+    this.servidor.post("https://h-api-ava.tindin.com.br/auth", {email:this.email, password:this.senha}, "").subscribe(res=>{
       sessionStorage.setItem("user", JSON.stringify(res));
       this.router.navigate(['/home']);
     }, erro=>{
