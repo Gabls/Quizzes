@@ -20,7 +20,7 @@
             height: 100%;
 
             img{
-                width: 100%;
+                width: 60%;
             }
         }
 
@@ -51,22 +51,10 @@
             }
 
             button{
-                background-color: $secundary-color;
                 width: 186px;
                 height: 52px;
-
+            
                 margin-left: calc(100% - 186px);
-
-                border: none;
-                color: $white;
-
-                transition: all 0.5s;
-
-                &:hover{
-                    background-color: $black;
-
-                    cursor: pointer;
-                }
             }
         }
     }
