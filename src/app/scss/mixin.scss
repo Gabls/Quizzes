@@ -1,5 +1,6 @@
 @mixin flex($direction, $position) {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: $direction;
 
     @if $position == "fullCenter"{
@@ -11,5 +12,8 @@
     }
     @else if $position == "vrtCenter"{
         align-items: center;
+    }
+    @else{
+        justify-content: $position;
     }
 }
