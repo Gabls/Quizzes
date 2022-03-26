@@ -42,7 +42,7 @@
     @include flex(row, space-evenly);
     background-color: $white;
 
-    padding: 100px 120px;
+    padding: 100px 120px 0px 120px;
 
     .quiz{
         width: 300px;
