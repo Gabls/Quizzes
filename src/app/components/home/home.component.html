@@ -1,18 +1,94 @@
 <div id="header">
     <img src="../../../assets/logo.png" alt="Logo da empresa Tindin">
     <h1>Boas vindas, {{nome}}</h1>
-    <button (click)="adicionar()">Adicionar Quiz</button>
+    <button (click)="quizToggle()">Adicionar Quiz</button>
 </div>
 
-<app-add-quiz></app-add-quiz>
+<div id="background" (click)="quizToggle()">
+</div>
+
+<div id="form">
+    <h1>{{tituloQuiz}}</h1>
+
+    <div id="page01">
+        <span>Título</span>
+        <input [(ngModel)]="titulo" id="txtTitulo" type="text">
+        <p *ngIf="errorTitulo">Digite o Título, por favor!</p>
+    
+        <span>Descrição</span>
+        <textarea [(ngModel)]="descricao" id="txtDescricao"></textarea>
+        <p *ngIf="errorDescricao">Digite a Descrição, por favor!</p>
+    
+        <span>Tipo</span>
+        <select [(ngModel)]="tipo" id="txtTipo">
+            <option value="MULTIPLE_CHOICE_ONE">Multiplas Escolhas</option>
+        </select>
+        <p *ngIf="errorTipo">Selecione um Tipo, por faor!</p>
+    
+        <div>
+            <div>
+                <span>Dificuldade</span>
+                <select [(ngModel)]="dificuldade" id="txtDificuldade">
+                    <option value="EASY">Fácil</option>
+                    <option value="MEDIUM">Médio</option>
+                    <option value="HARD">Difícil</option>
+                </select>
+                <p *ngIf="errorDificuldade">Selecione uma Dificuldade, por faor!</p>
+            </div>
+    
+            <div>
+                <span>Experiência</span>
+                <input [(ngModel)]="xp" id="txtXp" type="number" min="0">
+                <p *ngIf="errorXp">Selecione uma quantidade maior que 0, por faor!</p>
+            </div>
+        </div>
+    
+        <button (click)="avancar()">Avançar</button>
+    </div>
+
+    <div id="page02">
+        <div>
+            <div>
+                <span>Texto</span>
+                <input [(ngModel)]="texto" id="txtTexto" type="text">
+                <p *ngIf="errorTexto">Digite um texto, por favor!</p>
+            </div>
+
+            <div>
+                <span>Correção</span>
+                <select [(ngModel)]="correcao" id="txtCorrecao">
+                    <option value="true">Verdadeiro</option>
+                    <option value="false">Falso</option>
+                </select>
+                <p *ngIf="errorCorreao">Selecione uma das opções, por favor!</p>
+            </div>
+
+            <button (click)="adicionarQuestao()">Adicionar</button>
+        </div>
+
+        <h3>Opções Adicionadas</h3>
+        <div id="listaQuestao">
+            <div *ngFor="let l of questoes; ; let id = index" class="questao">
+                <p>{{l.text}}</p>
+                <button (click)="removerQuestao(id)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"/></svg></button>
+            </div>
+        </div>
+        <p *ngIf="errorOpcao">Adicione pelo menos uma opção, por favor!</p>
+
+        <button (click)="pageToggle()">Voltar</button>
+        <button *ngIf="!atualizando" (click)="enviar()">Enviar</button>
+        <button *ngIf="atualizando" (click)="atualizar()">Atualizar</button>
+    </div>
+</div>
+
 
 <div id="content">
-    <div *ngFor="let l of lista" id="{{l._id}}" class="quiz">
+    <div *ngFor="let l of listaItens" id="{{l._id}}" class="quiz">
         <img src="../../../assets/quiz.jpg" alt="Imagem ilustrativa de vários matérias escolares">
 
         <div class="buttons">
-            <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.363 8.464l1.433 1.431-12.67 12.669-7.125 1.436 1.439-7.127 12.665-12.668 1.431 1.431-12.255 12.224-.726 3.584 3.584-.723 12.224-12.257zm-.056-8.464l-2.815 2.817 5.691 5.692 2.817-2.821-5.693-5.688zm-12.318 18.718l11.313-11.316-.705-.707-11.313 11.314.705.709z"/></svg>Editar</button>
-            <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm.456-11.429l-4.528 4.528 5.658 5.659 4.527-4.53-5.657-5.657z"/></svg>Excluir</button>
+            <button (click)="editar(l._id)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.363 8.464l1.433 1.431-12.67 12.669-7.125 1.436 1.439-7.127 12.665-12.668 1.431 1.431-12.255 12.224-.726 3.584 3.584-.723 12.224-12.257zm-.056-8.464l-2.815 2.817 5.691 5.692 2.817-2.821-5.693-5.688zm-12.318 18.718l11.313-11.316-.705-.707-11.313 11.314.705.709z"/></svg>Editar</button>
+            <button (click)="excluir(l._id)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm.456-11.429l-4.528 4.528 5.658 5.659 4.527-4.53-5.657-5.657z"/></svg>Excluir</button>
         </div>
 
         <div class="text">
