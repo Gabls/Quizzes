@@ -1,27 +1,31 @@
-# Quizzes
+# Quizes
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+## 📜 Descrição
+  Quizes é um desafio para os ingressantes da vaga de "Desenvolvedor: Frontend Jr", realizado pela empresa TIindin. Nesse desafio foi feito uma simples aplicação que contém login e CRUD de quizzes. Esse projeto foi realizado em Angular CLI na versão 13.3.0.
+<br/><br/>
 
-## Development server
+## 💻 Tecnologias
+  - HTML
+  - SCSS
+  - TypeScript
+  - JavaScript
+  
+  <img alt="HTML5" src="https://img.shields.io/badge/-HTML5-e54d26?style=for-the-badge&logo=html5&logoColor=white"/> <img alt="SASS" src="https://img.shields.io/badge/-SASS-CC6699?style=for-the-badge&logo=sass&logoColor=white"/> <img alt="TypeScipt" src="https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"/> <img alt="JavaScript" src="https://img.shields.io/badge/-JavaScript-ead41c?style=for-the-badge&logo=javascript&logoColor=white"/>
+  <br/><br/>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## ⚙️ Pré-Requisitos
+  - NodeJS
+  
+  <img alt="NodeJs" src="https://img.shields.io/badge/-Nodejs-43853d?style=for-the-badge&logo=node.js&logoColor=white"/>
+  <br/><br/>
+  
+## ⚙️ Como usar
+  1. Clone esse repositório com o comando `git clone`. Exemplo:
+  ```bash
+    git clone https://github.com/Gabls/Quizzes.git
+  ```
+  2. No diretório do projeto, instale as dependências necessárias com o comando `npm install`.
 
-## Code scaffolding
+  3. No diretório do projeto, inicie o servidor utilizando o comando: `ng serve`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+  4. Pronto! O projeto já está rodando na sua máquina, agora é só você utilizar como quiser!!
