@@ -47,14 +47,21 @@
             p{
                 margin-top: 5px;
 
-                color: $quaternary-color;
+                color: $quinary-color;
+                font-size: 0.8em;
             }
 
             button{
+                @include flex(row, fullCenter);
                 width: 186px;
                 height: 52px;
             
                 margin-left: calc(100% - 186px);
+
+                h5{
+                    font-size: 1.6em;
+                    margin: 0px;
+                }
             }
         }
     }
