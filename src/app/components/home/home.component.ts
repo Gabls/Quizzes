@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServidorService } from 'src/app/services/servidor.service';
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,10 +10,17 @@ import * as $ from 'jquery';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private servidor: ServidorService){
+  constructor(private servidor: ServidorService, private route: Router){
     let json = JSON.parse(sessionStorage.getItem("user") || "{}");
-    this.token = json["token"];
-    this.nome = json["user"]["name"];
+
+    if(Object.keys(json).length == 0){
+      this.route.navigate(["/login"]);
+      return;
+    }
+    else{
+      this.token = json["token"];
+      this.nome = json["user"]["name"];
+    }
 
     this.load();
   }
@@ -20,172 +28,260 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private id:string = "";
+  //#region Propriedades
+  //#region Usuário
   private token: string = "";
   public nome:string = "";
-  public listaItens:any = [];
-  private listaAtt:any = [];
-  public tituloQuiz:string = "";
-  public atualizando:boolean = false;
+  //#endregion
 
-  //Page 01
-  private team:string = "623497e07ccb72a54717b9f4";
-  public titulo:string = "";
-  public descricao:string = "";
-  public dificuldade:string = "";
-  public tipo:string = "";
-  public xp:number = 0;
+  //#region Quiz
+  public titleQuiz:string = "";
+  public listaQuiz:Array<any> = [];
+  private id:any = {
+    _id: ""
+  };
+  public quiz:any = {
+    team: "623497e07ccb72a54717b9f4",
+    title: "",
+    description: "",
+    type: "",
+    level: "",
+    rewardXp: 0,
+    options: null
+  };
 
-  public errorTitulo:boolean = false;
-  public errorDescricao:boolean = false;
-  public errorDificuldade:boolean = false;
-  public errorTipo:boolean = false;
-  public errorXp:boolean = false;
-
-  //Page 02
-  public texto:string = "";
-  public correcao:any;
-  public questoes:any;
+  public opt:any = {
+    text: "",
+    correct: null
+  };
   private lista:Array<object> = [];
+  //#endregion
 
-  public errorTexto:boolean = false;
-  public errorCorreao:boolean = false;
-  public errorOpcao:boolean = false;
+  //#region Erros
+  public errorPage01:Array<any> = [{
+    erro: false,
+    title: "Digite o Título, por favor!",
+  }, {
+    erro: false,
+    title: "Digite a Descrição, por favor!",
+  }, {
+    erro: false,
+    title: "Selecione um Tipo, por faovr!",
+  },  {
+    erro: false,
+    title: "Selecione uma Dificuldade, por favor!",
+  }, {
+    erro: false,
+    title: "Selecione uma quantidade maior que 0, por favor!",
+  }];
 
+  public errorPage02:Array<any> = [{
+    erro: false,
+    title: "Digite um texto, por favor!",
+  }, {
+    erro: false,
+    title: "Selecione uma das opções, por favor!",
+  }];
+  public errorOptions:boolean = false;
+  //#endregion
+
+  //#region General
+  public updating:boolean = false;
+  //#endregion
+  //#endregion
+  
+  //#region Carregar lista de Quizzes
   load(){
-    this.servidor.get("https://h-api-ava.tindin.com.br/quizzes?filter=team:623497e07ccb72a54717b9f4&fields=name,title,description,level,rewardXp,type", this.token).subscribe(res=>{
-      this.listaItens = res;
-      this.listaItens = this.listaItens["quizzes"];
+    this.servidor.get("https://h-api-ava.tindin.com.br/quizzes?filter=team:623497e07ccb72a54717b9f4&fields=name,title,description,level,rewardXp,type", this.token).subscribe((dados: any)=>{
+      this.listaQuiz = dados["quizzes"];
     });
   }
+  //#endregion
 
-  quizToggle(){
-    this.tituloQuiz = "Novo QuiZ!";
-    this.atualizando = false;
+  //#region Abrir a página "Adicionar Quiz"
+  quizToggle(page:any){
+    switch(page){
+      case "add":
+        if(this.updating){
+          this.clear();
+        }
+
+        this.titleQuiz = "Novo Quiz!";
+        this.updating = false;
+        delete this.quiz._id;
+        break;
+
+      case "uptd":
+        this.titleQuiz = "Atualizando!";
+        this.updating = true;
+        break;
+    }
 
     $("#background").fadeToggle();
     $("#form").animate({width:'toggle'},450);
   }
+  //#endregion
 
+  //#region Trocar a página do "Adicionar Quiz"
   pageToggle(){
     $("#page01").fadeToggle();
     $("#page02").fadeToggle();    
   }
+  //#endregion
 
-  editar(id:string){
-    this.quizToggle();
-    this.tituloQuiz = "Atualizando!";
-    this.id = id;
-    this.atualizando = true;
+  //#region Limpar os inputs
+  clear(){
+    this.quiz["title"] = "";
+    this.quiz["description"] = "";
+    this.quiz["type"] = "";
+    this.quiz["level"] = "";
+    this.quiz["rewardXp"] = 0;
+    this.quiz["options"] = null;
+  }
+  //#endregion
 
-    this.servidor.get(`https://h-api-ava.tindin.com.br/quizzes/${id}`, this.token).subscribe(res=>{
-      this.listaAtt = res;
-      this.titulo = this.listaAtt["quiz"]["title"];
-      this.descricao = this.listaAtt["quiz"]["description"];
-      this.dificuldade = this.listaAtt["quiz"]["level"];
-      this.tipo = this.listaAtt["quiz"]["type"];
-      this.questoes = this.listaAtt["quiz"]["options"];
+  //#region Validação de valores
+  empty(value: any){
+    let erro = false;
+
+    if(value == "" || value == 0 || value == null){
+      erro = true;
+    }
+
+    return erro;
+  }
+  //#endregion
+
+  //#region Avançar a página em "Adicionar Quiz"
+  next(){
+    //Limpar Erros
+    this.errorPage01.forEach((i: any) => {
+      i["erro"] = false;
+    });
+
+    //Validação
+    let num = 0;
+    for (let index = 0; index < Object.values(this.quiz).length; index++){
+      const item = Object.keys(this.quiz)[index];
+      const value = Object.values(this.quiz)[index];
+
+      if(item != "team" && item && item != "options" && item != "_id"){
+        if(this.empty(value)){
+          $(`#txt${item.charAt(0).toUpperCase() + item.slice(1)}`).focus();
+          this.errorPage01[num]["erro"] = true;
+          return;
+        }
+        num++;
+      }
+    }
+
+    //Trocar Página
+    this.pageToggle();
+  }
+  //#endregion
+
+  //#region Adicionar opções em "Adicionar Quiz"
+  addOption(){
+    //Limpar Erros
+    this.errorPage02.forEach((i: any) => {
+      i["erro"] = false;
+    });
+
+    //Validação
+    for (let index = 0; index < Object.values(this.opt).length; index++){
+      const item = Object.keys(this.opt)[index];
+      const value = Object.values(this.opt)[index];
+
+      if(this.empty(value)){
+        $(`#txt${item.charAt(0).toUpperCase() + item.slice(1)}`).focus();
+        this.errorPage02[index]["erro"] = true;
+        return;
+      }
+    }
+
+    //Salvando informação
+    if(this.quiz["options"] != null){
+      this.lista = this.quiz["options"];
+    }
+
+    this.lista.push({text: this.opt["text"], correct: this.opt["correct"]});
+    this.quiz["options"] = this.lista;
+  }
+  //#endregion
+
+  //#region Remover opções em "Adicionar Quiz"
+  deleteteOption(id:number){
+    this.lista = this.quiz["options"];
+    this.lista.splice(id, 1);
+    this.quiz["options"] = this.lista;
+  }
+  //#endregion
+
+  //#region Enviar o quiz
+  submit(){
+    //Limpar erros
+    this.errorOptions = false;
+
+    //Validação
+    if(this.quiz["options"] == null){
+      this.errorOptions = true;
+      return;
+    }
+
+    //Enviando
+    this.servidor.post("https://h-api-ava.tindin.com.br/quizzes", this.quiz, this.token).subscribe(dados=>{
+      this.clear();
+      this.load();
+      this.quizToggle(null);
+      this.pageToggle();
     });
   }
+  //#endregion
 
-  excluir(id: string){
+  //#region Editar um quiz
+  edit(id:any){
+    this.quizToggle("uptd");
+    Object.assign(this.quiz, {_id:id});
+
+    this.servidor.get(`https://h-api-ava.tindin.com.br/quizzes/${id}`, this.token).subscribe((dados: any) => {
+      this.quiz["title"] = dados["quiz"]["title"];
+      this.quiz["description"] = dados["quiz"]["description"];
+      this.quiz["type"] = dados["quiz"]["type"];
+      this.quiz["level"] = dados["quiz"]["level"];
+      this.quiz["options"] = dados["quiz"]["options"];
+
+      //Por algum motivo o rewardXp não está vindo quando puxo as informações, então eu decidi deixar um valor fixo
+      this.quiz["rewardXp"] = 20 //dados["quiz"]["rewardXp"];
+    });
+  }
+  //#endregion
+
+  //#region Deletar um quiz
+  delete(id: string){
     this.servidor.delete(`https://h-api-ava.tindin.com.br/quizzes/${id}`, this.token).subscribe(()=>{
       this.load();
     });
   }
+  //#endregion
 
-  avancar(){
-    this.errorTitulo = false, this.errorDescricao = false, this.errorTipo = false, this.errorDificuldade = false, this.errorXp = false;
+  //#region Atualizar o quiz
+  update(){
+    //Limpar erros
+    this.errorOptions = false;
 
-    if(this.titulo == ""){
-      $("#txtTitulo").focus();
-      this.errorTitulo = true;
-      return;
-    }
-    if(this.descricao == ""){
-      $("#txtDesricao").focus();
-      this.errorDescricao = true;
-      return;
-    }
-    if(this.tipo == ""){
-      $("#txtTipo").focus();
-      this.errorTipo = true;
-      return;
-    }
-    if(this.dificuldade == ""){
-      $("#txtDificuldade").focus();
-      this.errorDificuldade = true;
-      return;
-    }
-    if(this.xp <= 0){
-      $("#txtXp").focus();
-      this.errorXp = true;
+    //Validação
+    if(this.quiz["options"] == null){
+      this.errorOptions = true;
       return;
     }
 
-    this.pageToggle();
-  }
-
-  adicionarQuestao(){
-    this.errorTexto = false, this.errorCorreao = false;
-
-    if(this.texto == ""){
-      $("#txtTexto").focus();
-      this.errorTexto = true;
-      return;
-    }
-    if(this.correcao == null){
-      $("#txtCorrecao").focus();
-      this.errorCorreao = true;
-      return;
-    }
-
-    if(this.questoes != null){
-      this.lista = this.questoes;
-    }
-
-    this.lista.push({correct:this.correcao, text:this.texto});
-    this.questoes = this.lista;
-  }
-
-  removerQuestao(id:number){
-    this.lista = this.questoes;
-    this.lista.splice(id, 1);
-    this.questoes = this.lista;
-  }
-
-  enviar(){
-    this.errorOpcao = false;
-
-    if(this.questoes == null){
-      this.errorOpcao = true;
-      return;
-    }
-
-    let data = {team:this.team, title:this.titulo, description:this.descricao, level:this.dificuldade, type:this.tipo, rewardXp:this.xp, options:this.questoes}
-    this.servidor.post("https://h-api-ava.tindin.com.br/quizzes", data, this.token).subscribe(res=>{
-      this.titulo = "", this.descricao = "", this.dificuldade = "", this.tipo = "", this.xp = 0, this.questoes = null, this.texto = "", this.correcao = null;
+    //Enviando
+    this.servidor.put("https://h-api-ava.tindin.com.br/quizzes", this.quiz, this.token).subscribe(dados=>{
+      this.clear();
       this.load();
-      this.quizToggle();
+      this.quizToggle(null);
       this.pageToggle();
     });
   }
-
-  atualizar(){
-    this.errorOpcao = false;
-
-    if(this.questoes == null){
-      this.errorOpcao = true;
-      return;
-    }
-
-    let data = {_id: this.id, team:this.team, title:this.titulo, description:this.descricao, level:this.dificuldade, type:this.tipo, rewardXp:this.xp, options:this.questoes}
-    this.servidor.put(`https://h-api-ava.tindin.com.br/quizzes/${this.id}`, data, this.token).subscribe(res=>{
-      this.titulo = "", this.descricao = "", this.dificuldade = "", this.tipo = "", this.xp = 0, this.questoes = null, this.texto = "", this.correcao = null;
-      this.atualizando = false;
-      this.load();
-      this.quizToggle();
-      this.pageToggle();
-    });
-  }
+  //#endregion
 }
