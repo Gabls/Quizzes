@@ -1,0 +1,182 @@
+//#region Add Quiz
+#background{
+    background-color: rgba($black, 0.7);
+    backdrop-filter: blur(2px);
+    width: 100%;
+    height: 100%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+
+    cursor: pointer;
+
+    z-index: 400;
+}
+
+#form{
+    background-color: $white;
+    width: 500px;
+    height: 100%;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: none;
+
+    padding: 40px 80px;
+
+    z-index: 500;
+
+    h1{
+        margin-bottom: 40px;
+        text-align: center;
+        color: $primary-color;
+    }
+
+    span{
+        display: block;
+
+        font-size: 1em;
+        margin-top: 20px;
+        font-family: 'Comfortaa', cursive;
+    }
+
+    input, select{
+        width: 100%;
+        height: 52px;
+
+        padding: 3px 24px;
+    }
+
+    textarea{
+        width: 100%;
+        height: 86px;
+
+        padding: 22px;
+
+        resize: none;
+    }
+
+    p{
+        margin-top: 5px;
+
+        color: $quinary-color;
+        font-size: 0.8em;
+    }
+
+
+    button{
+        @include flex(row, fullCenter);
+        width: 100%;
+        height: 52px;
+
+        margin-top: 40px;
+        border-radius: 30px;
+
+        font-size: 1.5em;
+
+        svg{
+            height: 90%;
+            margin-right: 10px;
+            fill: $white;
+        }
+    }
+
+    #page01, #page02{
+        width: calc(100% - 160px);
+        position: absolute;
+        
+        div{
+            @include flex(row, space-between);
+            div{
+                width: 45%;
+            }
+        }
+    }
+
+    #page02{
+        display: none;
+
+        #btnAdd{
+            background-color: $primary-color;
+            height: 30px;
+            margin-top: 10px;
+
+            &:hover{
+                background-color: $hover;
+            }
+        }
+
+        h3{
+            margin: 20px 0px 10px 0px;
+            color: $quaternary-color;
+        }
+
+        #listaQuestao{
+            width: 100%;
+            height: 180px;
+            overflow-y: scroll;
+
+            display: block;
+
+            border-width: 1.5px;
+            border-style: solid;
+            border-color: #999997;
+
+            .questao{
+                @include flex(row, vrtCenter);
+                width: 100%;
+                height: 40px;
+
+                padding: 5px 20px;
+                border-bottom-width: 1.5px;
+                border-bottom-style: solid;
+                border-bottom-color: #999997;
+
+                p{
+                    width: 80%;
+                    margin: 0px;
+                    color: $black;
+                }
+
+                button{
+                    @include flex(row, fullCenter);
+                    background-color: transparent;
+                    width: 25px;
+                    height: 25px;
+
+                    margin: 0px;
+
+                    border-radius: 100%;
+
+                    svg{
+                        height: 100%;
+                        margin: 0;
+                        fill: $quinary-color;
+
+                        transition: all 0.5s;
+
+                        &:hover{
+                            fill: $black;
+                        }
+                    }
+                }
+            }
+        }
+
+        button:nth-of-type(2){
+            background-color: $senary-color;
+
+            &:hover{
+                background-color: $hover;
+            }
+        }
+
+        button:nth-of-type(3){
+            margin-top: 10px;
+        }
+    }
+}
+//#endregion
