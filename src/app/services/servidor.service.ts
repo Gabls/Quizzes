@@ -25,4 +25,18 @@ export class ServidorService {
 
     return this.http.post(url, data);
   }
+
+  put(url: string, data: object, token: string){
+    if(token != ""){
+      let header = new HttpHeaders().append("x-api-key", token);
+      return this.http.put(url, data, {headers : header});
+    }
+
+    return this.http.put(url, data);
+  }
+
+  delete(url: string, token: string){
+    let header = new HttpHeaders().append("x-api-key", token);
+    return this.http.delete(url, {headers: header});
+  }
 }
