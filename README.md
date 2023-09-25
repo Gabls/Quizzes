@@ -5,17 +5,10 @@
 <br/><br/>
 
 ## 💻 Tecnologias
-  - HTML
-  - SCSS
-  - TypeScript
-  - JavaScript
-  
   <img alt="HTML5" src="https://img.shields.io/badge/-HTML5-e54d26?style=for-the-badge&logo=html5&logoColor=white"/> <img alt="SASS" src="https://img.shields.io/badge/-SASS-CC6699?style=for-the-badge&logo=sass&logoColor=white"/> <img alt="TypeScipt" src="https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"/> <img alt="JavaScript" src="https://img.shields.io/badge/-JavaScript-ead41c?style=for-the-badge&logo=javascript&logoColor=white"/>
   <br/><br/>
 
 ## ⚙️ Pré-Requisitos
-  - NodeJS
-  
   <img alt="NodeJs" src="https://img.shields.io/badge/-Nodejs-43853d?style=for-the-badge&logo=node.js&logoColor=white"/>
   <br/><br/>
   
